@@ -1,7 +1,14 @@
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+
 import * as express from "express";
 import * as http from "http";
 import * as sio from "socket.io";
+
 import { resolve } from "path";
+import { sendMessage } from "../redux/server/actions";
+
+import store from "../redux/server/store";
 
 const app = express();
 const server = http.createServer(app);
@@ -26,9 +33,18 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket: sio.Socket) => {
-  console.log("Hello, friend!");
+  console.log("Hello, friend! 👋");
+
+  socket.on("CHAT_MESSAGE", (action: ReturnType<typeof sendMessage>) => {
+    store.dispatch(action);
+    console.log(`Y${action.payload.user} said "${action.payload.message}"`);
+
+    io.emit("CHAT_MESSAGE", store.getState().messages);
+  });
 
   socket.on("disconnect", (socket: sio.Socket) => {
     console.log("Goodbye, friend!");
   });
 });
+
+io.on();
