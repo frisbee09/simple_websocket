@@ -6,6 +6,7 @@ import { resolve } from "path";
 const app = express();
 const server = http.createServer(app);
 
+// EngineIO options are passed through, but not typed and declared
 // @ts-ignore
 const io = sio(server, {
   serveClient: false,
