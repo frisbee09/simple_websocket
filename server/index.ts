@@ -18,7 +18,7 @@ server.listen(3000, () => {
 });
 
 app.get("/", (req, res) => {
-  const indexHTMLLocation = resolve(`./client/index.html`);
+  const indexHTMLLocation = resolve(`./dist/index.html`);
   console.log(
     `Sending ${indexHTMLLocation} to ${req.connection.remoteAddress}`
   );
@@ -27,5 +27,8 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket: sio.Socket) => {
   console.log("Hello, friend!");
-  socket.emit("news", { hello: "world" });
+
+  socket.on("disconnect", (socket: sio.Socket) => {
+    console.log("Goodbye, friend!");
+  });
 });

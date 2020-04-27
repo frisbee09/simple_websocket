@@ -11,11 +11,22 @@ module.exports = merge(common, {
   entry: [
     "react-hot-loader/patch",
     "webpack-hot-middleware/client",
-    "./client/src/index.tsx",
+    "./client/index.tsx",
   ],
   output: {
+    filename: "[name].bundle.js",
     path: path.resolve("./dist"),
+    publicPath: "/",
     filename: "client.js",
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(t|j)sx?$/,
+        include: /node_modules/,
+        use: ["react-hot-loader/webpack"],
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -32,7 +43,7 @@ module.exports = merge(common, {
     open: true,
     openPage: "",
     proxy: {
-      "/api": "http://localhost:3000",
+      "/": "http://localhost:3000",
     },
   },
 });
