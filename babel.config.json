@@ -1,7 +1,7 @@
 {
+  "plugins": [],
   "presets": [
     [
-      "@babel/typescript",
       "@babel/env",
       {
         "targets": {
@@ -12,6 +12,7 @@
         },
         "useBuiltIns": "usage"
       }
-    ]
+    ],
+    "@babel/typescript"
   ]
 }
