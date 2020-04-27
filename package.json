@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-server": "webpack --config webpack.devserver.js",
-    "dev-client": "webpack --config webpack.devclient.js",
+    "dev-back": "webpack --config webpack-back.config.js",
+    "dev-front": "webpack --config webpack-front.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +21,8 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "q": "^1.5.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "regenerator-runtime": "^0.13.5",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
@@ -32,6 +34,7 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
+    "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
     "@types/engine.io": "^3.1.2",
     "@types/express": "^4.17.6",
@@ -39,12 +42,17 @@
     "@types/socket.io": "^2.1.4",
     "@types/socket.io-client": "^1.4.32",
     "babel-loader": "^8.1.0",
+    "html-webpack-plugin": "^4.2.0",
     "node-hot-loader": "^1.17.9",
     "nodemon-webpack-plugin": "^4.3.1",
+    "react-hot-loader": "^4.12.20",
     "terser-webpack-plugin": "^2.3.6",
     "ts-node": "^8.9.1",
     "webpack-cli": "^3.3.11",
+    "webpack-dev-middleware": "^3.7.2",
     "webpack-dev-server": "^3.10.3",
+    "webpack-hot-middleware": "^2.25.0",
+    "webpack-merge": "^4.2.2",
     "webpack-node-externals": "^1.7.2"
   }
 }

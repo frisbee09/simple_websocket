@@ -13,8 +13,8 @@ const io = sio(server, {
   wsEngine: "ws", // uws is not supported since it is a native module
 });
 
-server.listen(8080, () => {
-  console.log(`Listening on port 8080 🚀`);
+server.listen(3000, () => {
+  console.log(`Listening on port 3000 🚀`);
 });
 
 app.get("/", (req, res) => {
@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
   res.sendFile(indexHTMLLocation);
 });
 
-io.on("connection", (socket) => {
+io.on("connection", (socket: sio.Socket) => {
   console.log("Hello, friend!");
   socket.emit("news", { hello: "world" });
 });
