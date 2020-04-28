@@ -3,6 +3,8 @@ import styled from "styled-components";
 import * as io from "socket.io-client";
 import { sendMessage } from "../../../redux/server/actions";
 import * as cuid from "cuid";
+import { Message } from "../../../redux/server/state";
+import ChatMessage from "./components/ChatMessage";
 
 interface ChatProps {}
 
@@ -17,6 +19,12 @@ const ChatWrapper = styled.div`
 const MessageArea = styled.div`
   min-height: 10px;
   flex: 1;
+
+  display: grid;
+  align-content: end;
+
+  grid-template-columns: auto 1fr auto;
+  grid-auto-rows: 20px;
 `;
 
 const ChatBarWrapper = styled.div`
@@ -49,9 +57,21 @@ const useSocket = () => {
   return socket.current;
 };
 
+const handleReceiveMessages = (
+  socket?: SocketIOClient.Socket,
+  setMessages?: React.Dispatch<React.SetStateAction<Message[]>>
+) => {
+  if (socket && setMessages) {
+    socket?.on("CHAT_MESSAGE", setMessages);
+  }
+};
+
 const Chat: React.FC<{}> = () => {
   const socket = useSocket();
+  const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState<string>("");
+
+  handleReceiveMessages(socket, setMessages);
 
   const handleSubmit = () => {
     const action = sendMessage(`guest${cuid()}`, input);
@@ -61,7 +81,7 @@ const Chat: React.FC<{}> = () => {
 
   return (
     <ChatWrapper>
-      <MessageArea />
+      <MessageArea>{messages.map(ChatMessage)}</MessageArea>
       <ChatBarWrapper>
         <input
           type="text"

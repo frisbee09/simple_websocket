@@ -16,3 +16,14 @@ export const sendMessage = createAction(
   user: string;
   message: string;
 }>();
+
+export const REGISTER_USER = "REGISTER_USER";
+export const registerUser = createAction(REGISTER_USER, (user: string) => ({
+  key: REGISTER_USER,
+  id: cuid(),
+  user,
+}))<{
+  key: typeof REGISTER_USER;
+  id: string;
+  user: string;
+}>();

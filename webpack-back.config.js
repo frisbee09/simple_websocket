@@ -4,6 +4,7 @@ const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 const NodemonPlugin = require("nodemon-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
+const circular = require("circular-dependency-plugin");
 const common = require("./webpack.common");
 
 module.exports = merge(common, {
@@ -15,5 +16,5 @@ module.exports = merge(common, {
   },
   target: "node",
   externals: [nodeExternals()],
-  plugins: [new NodemonPlugin()],
+  plugins: [new NodemonPlugin(), new circular()],
 });
