@@ -4,26 +4,42 @@ import * as cuid from "cuid";
 export const SEND_MESSAGE = "SEND_MESSAGE";
 export const sendMessage = createAction(
   SEND_MESSAGE,
-  (user: string, message: string) => ({
+  (userId: string, message: string) => ({
     key: "CHAT_MESSAGE",
-    id: cuid(),
-    user,
+    userId,
     message,
   })
 )<{
   key: "CHAT_MESSAGE";
-  id: string;
-  user: string;
+  userId: string;
   message: string;
 }>();
 
 export const REGISTER_USER = "REGISTER_USER";
 export const registerUser = createAction(REGISTER_USER, (user: string) => ({
   key: REGISTER_USER,
-  id: cuid(),
   user,
 }))<{
   key: typeof REGISTER_USER;
-  id: string;
   user: string;
 }>();
+
+export const PERSIST_USER = "PERSIST_USER";
+export const persistUser = createAction(
+  PERSIST_USER,
+  (user: string, cookie: string) => ({
+    id: cuid(),
+    user,
+  }),
+  (user: string, cookie: string) => ({
+    cookie,
+  })
+)<
+  {
+    id: string;
+    user: string;
+  },
+  {
+    cookie: string;
+  }
+>();

@@ -2,7 +2,6 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 
 import { resolve } from "path";
-import { Socket } from "socket.io";
 
 import { app, server, io } from "./setup";
 import { handleChat, handleRequestMessages } from "./chat";
@@ -16,7 +15,7 @@ app.get("/", (req, res) => {
   res.sendFile(indexHTMLLocation);
 });
 
-io.on("connection", (socket: Socket) => {
+io.on("connection", (socket: SocketIO.Socket) => {
   console.log("Hello, friend! 👋");
 
   handleConnection(socket);
@@ -25,7 +24,7 @@ io.on("connection", (socket: Socket) => {
   handleChat(socket);
   handleRequestMessages(socket);
 
-  socket.on("disconnect", (socket: Socket) => {
+  socket.on("disconnect", (socket: SocketIO.Socket) => {
     console.log("Goodbye, friend!");
   });
 });

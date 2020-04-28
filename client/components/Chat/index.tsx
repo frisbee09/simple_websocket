@@ -1,98 +1,87 @@
 import * as React from "react";
 import styled from "styled-components";
 import * as io from "socket.io-client";
-import { sendMessage } from "../../../redux/server/actions";
-import * as cuid from "cuid";
+import { sendMessage, registerUser } from "../../../redux/server/actions";
 import { Message } from "../../../redux/server/state";
 import ChatMessage from "./components/ChatMessage";
+import { SIGN_IN, WELCOME_USER } from "../../../server/handshake/constants";
+import SignIn from "./components/SignIn";
+import { ChatWrapper } from "./components/ChatSC";
+import ChatApp from "./components/ChatApp";
 
 interface ChatProps {}
 
-const ChatWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-
-  display: flex;
-  flex-flow: column nowrap;
-`;
-
-const MessageArea = styled.div`
-  min-height: 10px;
-  flex: 1;
-
-  display: grid;
-  align-content: end;
-
-  grid-template-columns: auto 1fr auto;
-  grid-auto-rows: 20px;
-`;
-
-const ChatBarWrapper = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-
-  width: 100%;
-  height: 3rem;
-
-  > input {
-    flex: 1;
-  }
-
-  > * {
-    height: 100%;
-  }
-  font-size: 1.4rem;
-`;
-
 const useSocket = () => {
-  const socket = React.useRef<SocketIOClient.Socket>();
+  const [socket, setSocket] = React.useState<SocketIOClient.Socket>();
   React.useEffect(() => {
-    socket.current = io.connect("/");
+    console.log(`Connecting to socket.io`);
+    const newSocket = io.connect("/");
+    newSocket.on("connect", () => {
+      console.log(`Connected with id ${newSocket.id}`);
+      setSocket(newSocket);
+    });
 
     return () => {
-      socket.current?.disconnect();
+      socket?.disconnect();
+      setSocket(undefined);
     };
   }, []);
 
-  return socket.current;
+  return socket;
+};
+
+const handleRegister = (
+  socket: SocketIOClient.Socket,
+  setUser: React.Dispatch<React.SetStateAction<{ name: string; id: string }>>
+) => {
+  socket.on(SIGN_IN, () => {
+    console.log("We need to sign in.");
+    setUser({ name: "", id: "" });
+  });
+  socket.on(WELCOME_USER, (userInfo: any) => setUser(userInfo));
 };
 
 const handleReceiveMessages = (
-  socket?: SocketIOClient.Socket,
-  setMessages?: React.Dispatch<React.SetStateAction<Message[]>>
+  socket: SocketIOClient.Socket,
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>
 ) => {
-  if (socket && setMessages) {
-    socket?.on("CHAT_MESSAGE", setMessages);
-  }
+  socket.on("CHAT_MESSAGE", setMessages);
 };
 
 const Chat: React.FC<{}> = () => {
+  window.localStorage.setItem("debug", "socket.io-client:socket");
   const socket = useSocket();
+  const [user, setUser] = React.useState<{ name: string; id: string }>({
+    name: "",
+    id: "",
+  });
   const [messages, setMessages] = React.useState<Message[]>([]);
-  const [input, setInput] = React.useState<string>("");
 
-  handleReceiveMessages(socket, setMessages);
+  React.useEffect(() => {
+    if (socket) {
+      handleReceiveMessages(socket, setMessages);
+      handleRegister(socket, setUser);
+    }
+  }, [socket?.id]);
 
-  const handleSubmit = () => {
-    const action = sendMessage(`guest${cuid()}`, input);
+  const requestRegister = (name: string) => {
+    const action = registerUser(name);
     socket?.emit(action.payload.key, action);
-    setInput("");
+  };
+
+  const handleSubmit = (input: string) => {
+    const action = sendMessage(user.id, input);
+    socket?.emit(action.payload.key, action);
   };
 
   return (
     <ChatWrapper>
-      <MessageArea>{messages.map(ChatMessage)}</MessageArea>
-      <ChatBarWrapper>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.currentTarget.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-        />
-        <button type="button" onClick={handleSubmit}>
-          Submit
-        </button>
-      </ChatBarWrapper>
+      {user.name && user.id ? (
+        <ChatApp {...{ handleSubmit, messages }} />
+      ) : (
+        <SignIn register={requestRegister} />
+      )}
+      {JSON.stringify(user)}
     </ChatWrapper>
   );
 };

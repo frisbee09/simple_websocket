@@ -1,6 +1,7 @@
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const path = require("path");
+const circular = require("circular-dependency-plugin");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
@@ -8,11 +9,7 @@ const common = require("./webpack.common");
 
 module.exports = merge(common, {
   mode: "development",
-  entry: [
-    "react-hot-loader/patch",
-    "webpack-hot-middleware/client",
-    "./client/index.tsx",
-  ],
+  entry: ["react-hot-loader/patch", "./client/index.tsx"],
   output: {
     filename: "[name].bundle.js",
     path: path.resolve("./dist"),
@@ -33,6 +30,7 @@ module.exports = merge(common, {
       template: path.resolve(__dirname, "client", "index.html"),
     }),
     new webpack.HotModuleReplacementPlugin(),
+    new circular(),
   ],
   devServer: {
     contentBase: path.resolve(__dirname, "client", "content"),
@@ -43,7 +41,7 @@ module.exports = merge(common, {
     open: true,
     openPage: "",
     proxy: {
-      "/": "http://localhost:3000",
+      "*": "http://[::1]:3000",
     },
   },
 });
