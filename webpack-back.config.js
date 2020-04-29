@@ -16,4 +16,5 @@ module.exports = merge(common, {
   target: "node",
   externals: [nodeExternals()],
   plugins: [new NodemonPlugin()],
+  devtool: "source-map",
 });

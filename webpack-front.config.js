@@ -42,4 +42,5 @@ module.exports = merge(common, {
       "*": "http://[::1]:3000",
     },
   },
+  devtool: "source-map",
 });
