@@ -8,7 +8,7 @@ import { handleChat, handleRequestMessages } from "./chat";
 import { handleRegister, handleConnection } from "./handshake";
 
 app.get("/", (req, res) => {
-  const indexHTMLLocation = resolve(`./dist/index.html`);
+  const indexHTMLLocation = resolve(`./dist/public/index.html`);
   console.log(
     `Sending ${indexHTMLLocation} to ${req.connection.remoteAddress}`
   );
