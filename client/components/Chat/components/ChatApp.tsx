@@ -2,6 +2,7 @@ import * as React from "react";
 import { MessageArea, ChatBarWrapper } from "./ChatSC";
 import ChatMessage from "./ChatMessage";
 import { Message } from "../../../../redux/server/state";
+import Cube from "../../Pieces/components/Cube";
 
 const ChatApp: React.FC<{
   messages: Message[];
