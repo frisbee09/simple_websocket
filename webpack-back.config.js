@@ -2,11 +2,11 @@ const merge = require("webpack-merge");
 const path = require("path");
 const NodemonPlugin = require("nodemon-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
-
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const common = require("./webpack.common");
+const devConfig = require("./webpack.dev.config");
 
-module.exports = merge(common, {
-  mode: "development",
+module.exports = merge(common, devConfig, {
   entry: { server: "./server/index.ts" },
   output: {
     path: path.resolve("./dist"),

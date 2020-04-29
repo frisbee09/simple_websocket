@@ -5,9 +5,9 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const common = require("./webpack.common");
+const devConfig = require("./webpack.dev.config");
 
-module.exports = merge(common, {
-  mode: "development",
+module.exports = merge(common, devConfig, {
   entry: ["react-hot-loader/patch", "./client/index.tsx"],
   output: {
     filename: "[name].bundle.js",

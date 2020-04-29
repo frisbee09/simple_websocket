@@ -1,6 +1,7 @@
 const merge = require("webpack-merge");
 const common = require("./webpack.common");
 const nodeExternals = require("webpack-node-externals");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const sharedConfig = merge(common, {
   mode: "production",
@@ -14,6 +15,7 @@ const serverConfig = merge(sharedConfig, {
   target: "node",
   entry: { server: "./server/index.ts" },
   externals: [nodeExternals()],
+  plugins: [new CleanWebpackPlugin()],
 });
 
 const clientConfig = merge(sharedConfig, {

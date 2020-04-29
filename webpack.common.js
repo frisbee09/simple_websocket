@@ -18,7 +18,7 @@ module.exports = {
       chunks: "all",
     },
   },
-  plugins: [new CleanWebpackPlugin(), new circular()],
+  plugins: [new circular()],
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".json"],
   },
