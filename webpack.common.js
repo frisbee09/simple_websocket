@@ -1,4 +1,6 @@
 const TerserPlugin = require("terser-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const circular = require("circular-dependency-plugin");
 
 module.exports = {
   module: {
@@ -16,9 +18,9 @@ module.exports = {
       chunks: "all",
     },
   },
+  plugins: [new CleanWebpackPlugin(), new circular()],
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".json"],
   },
-  watch: true,
   devtool: "source-map",
 };

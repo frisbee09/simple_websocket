@@ -1,7 +1,6 @@
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const path = require("path");
-const circular = require("circular-dependency-plugin");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
@@ -30,7 +29,6 @@ module.exports = merge(common, {
       template: path.resolve(__dirname, "client", "index.html"),
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new circular(),
   ],
   devServer: {
     contentBase: path.resolve(__dirname, "client", "content"),
