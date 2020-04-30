@@ -12,8 +12,9 @@ export const handleChat = (socket: SocketIO.Socket) => {
     store.dispatch(action);
     const userName = store.getState().users.byId[action.payload.userId].name;
     console.log(`${userName} said "${action.payload.message}"`);
+    const newMessage = store.getState().messages.slice(-1);
 
-    io.emit(CHAT_MESSAGE, store.getState().messages);
+    io.emit(CHAT_MESSAGE, newMessage);
   });
 };
 

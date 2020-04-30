@@ -3,9 +3,11 @@ import { Message } from "../../../../redux/server/state";
 
 const ChatMessage: React.FC<Message> = ({ user, id, timeId, message }) => (
   <>
-    <span>{user}: </span>
-    <span>{message}</span>
-    <span>{new Date(timeId).toLocaleString()}</span>
+    <span className="user">{user}: </span>
+    <span className="message">{message}</span>
+    <span className="date">
+      {new Date(timeId).toLocaleString().slice(-8, -3)}
+    </span>
   </>
 );
 

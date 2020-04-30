@@ -1,9 +1,10 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 interface DragContainerProps {
   x: number;
   y: number;
+  isDragging: boolean;
 }
 const DragContainer = styled.div.attrs<DragContainerProps>(({ x, y }) => ({
   style: {
@@ -13,10 +14,18 @@ const DragContainer = styled.div.attrs<DragContainerProps>(({ x, y }) => ({
   cursor: grab;
 
   position: relative;
+  display: inline-block;
+  ${(props) =>
+    props.isDragging &&
+    css`
+      filter: brightness(1.2);
+    `}
 `;
 
 const Draggable: React.FC<
-  { initialX: number; initialY: number } & React.HTMLAttributes<HTMLDivElement>
+  { initialX?: number; initialY?: number } & React.HTMLAttributes<
+    HTMLDivElement
+  >
 > = ({ onDragStart, onDragEnd, initialX, initialY, children }) => {
   const [isDragging, setDragging] = React.useState<boolean>(false);
 
@@ -32,24 +41,37 @@ const Draggable: React.FC<
   React.useEffect(() => {
     if (isDragging) {
       window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("touchmove", handleTouchMove);
       window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("touchend", handleMouseUp);
     }
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchend", handleMouseUp);
     };
   }, [isDragging]);
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleTouchMove = (e: TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!isDragging) {
       return;
     }
 
-    const { clientX, clientY } = e;
+    const { clientX, clientY } = e.changedTouches[0];
     setPos({ x: clientX - grabDelta.x, y: clientY - grabDelta.y });
   };
 
-  const handleMouseUp = (e: MouseEvent) => {
+  const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
+    if (!isDragging) {
+      return;
+    }
+    setPos({ x: clientX - grabDelta.x, y: clientY - grabDelta.y });
+  };
+
+  const handleMouseUp = (e: any) => {
     setDragging(false);
 
     if (onDragEnd) {
@@ -74,7 +96,12 @@ const Draggable: React.FC<
   };
 
   return (
-    <DragContainer onMouseDown={handleMouseDown} x={pos.x} y={pos.y}>
+    <DragContainer
+      onMouseDown={handleMouseDown}
+      x={pos.x}
+      y={pos.y}
+      isDragging={isDragging}
+    >
       {children}
     </DragContainer>
   );

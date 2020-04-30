@@ -110,6 +110,7 @@ export const GlobalStyle = createGlobalStyle`
 		/* Overwrite the default font-family list with Lato now that we're using it */
 		font-family: 'Lato', 'Apple Color Emoji', 'Segoe UI Emoji',
 			'Segoe UI Symbol', sans-serif;
+		font-size: inherit;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		vertical-align: baseline;
@@ -145,6 +146,7 @@ export const GlobalStyle = createGlobalStyle`
         background: #373F51;
         color: #D8DBE2;
 
+		font-size: 1.6rem;
         line-height: 1.4;
     }
 

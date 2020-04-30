@@ -2,8 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 
 const SignInWrapper = styled.div`
-  height: 100%;
-  width: 100%;
+  grid-column-start: span 2;
+  grid-row-start: span 2;
 
   display: flex;
   flex-flow: column;

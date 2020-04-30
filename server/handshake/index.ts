@@ -8,9 +8,12 @@ import {
 
 export const handleConnection = (socket: SocketIO.Socket) => {
   const state = store.getState();
-  const cookie = socket.handshake.headers.cookie;
-  if (state.users.cookies.includes(cookie)) {
-    const { name, id } = state.users.byId[cookie];
+  const userId = socket.handshake.query.userId;
+  const username = state.users.byId[userId]?.name;
+  console.log(`Friend is ${username || "not known 😱"}`);
+
+  if (username) {
+    const { name, id } = state.users.byId[userId];
     console.log(`User "${name}" has connected.`);
     socket.broadcast.emit(USER_JOINED, name);
     socket.emit(WELCOME_USER, { name, id });
