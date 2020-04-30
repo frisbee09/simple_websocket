@@ -8,30 +8,24 @@ import { useSocket } from "../../socket/useSocket";
 import {
   REQUEST_INITIAL_MESSAGES,
   INITIAL_MESSAGES,
+  CHAT_MESSAGE,
 } from "../../../server/chat/constants";
 
 interface ChatProps {}
-
-const handleReceiveMessages = (
-  socket: SocketIOClient.Socket,
-  messages: Message[],
-  setMessages: React.Dispatch<React.SetStateAction<Message[]>>
-) => {
-  socket.on("CHAT_MESSAGE", (newMessages: Message[]) =>
-    setMessages([...messages, ...newMessages])
-  );
-
-  socket.on(INITIAL_MESSAGES, setMessages);
-};
 
 const Chat: React.FC<{ userId: string }> = ({ userId }) => {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const socket = useSocket();
 
+  const appendMessages = (newMessages: Message[]) => {
+    setMessages((currentMessages) => [...currentMessages, ...newMessages]);
+  };
+
   React.useEffect(() => {
     if (socket) {
-      handleReceiveMessages(socket, messages, setMessages);
+      socket.on(CHAT_MESSAGE, appendMessages);
       socket.emit(REQUEST_INITIAL_MESSAGES);
+      socket.on(INITIAL_MESSAGES, setMessages);
     }
   }, [socket?.id]);
 

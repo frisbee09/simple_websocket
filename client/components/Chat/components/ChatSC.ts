@@ -3,6 +3,9 @@ import { media } from "../../App/config/MediaQuery";
 
 export const ChatWrapper = styled.div`
   display: flex;
+  min-height: 0;
+  max-height: 100%;
+
   flex-flow: column nowrap;
   ${media.s`
       grid-row-start: 2;
@@ -13,7 +16,6 @@ export const ChatWrapper = styled.div`
 
 export const MessageArea = styled.div`
   min-height: 10px;
-  max-height: 100%;
   flex: 1;
 
   display: grid;
