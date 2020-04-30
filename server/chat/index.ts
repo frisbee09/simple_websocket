@@ -4,18 +4,20 @@ import {
   INITIAL_MESSAGES,
 } from "./constants";
 import { sendMessage } from "../../redux/server/actions";
-import store from "../../redux/server/store";
+import store, { withDispatch } from "../../redux/server/store";
 import { io } from "../setup";
 
 export const handleChat = (socket: SocketIO.Socket) => {
-  socket.on(CHAT_MESSAGE, (action: ReturnType<typeof sendMessage>) => {
-    store.dispatch(action);
-    const userName = store.getState().users.byId[action.payload.userId].name;
-    console.log(`${userName} said "${action.payload.message}"`);
-    const newMessage = store.getState().messages.slice(-1);
+  socket.on(
+    CHAT_MESSAGE,
+    withDispatch((action: ReturnType<typeof sendMessage>) => {
+      const userName = store.getState().users.byId[action.payload.userId].name;
+      console.log(`${userName} said "${action.payload.message}"`);
+      const newMessage = store.getState().messages.slice(-1);
 
-    io.emit(CHAT_MESSAGE, newMessage);
-  });
+      io.emit(CHAT_MESSAGE, newMessage);
+    })
+  );
 };
 
 export const handleRequestMessages = (socket: SocketIO.Socket) => {
