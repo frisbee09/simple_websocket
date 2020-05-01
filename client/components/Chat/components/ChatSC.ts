@@ -7,11 +7,15 @@ export const ChatWrapper = styled.div`
   max-height: 100%;
 
   flex-flow: column nowrap;
+  background: #58a4b0;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+
   ${media.s`
       grid-row-start: 2;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.8);
   `}
-  background: #58a4b0;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 `;
 
 export const MessageArea = styled.div`
@@ -27,7 +31,6 @@ export const MessageArea = styled.div`
 
   .user {
     font-style: bold;
-    padding-right: 3px;
   }
 
   .message {
@@ -39,7 +42,7 @@ export const MessageArea = styled.div`
   }
 
   span {
-    padding: 3px 0;
+    padding: 3px 2px;
     min-height: 2rem;
     background: #58a4b0;
     &:nth-of-type(6n + 4),
