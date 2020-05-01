@@ -23,7 +23,7 @@ export const MessageArea = styled.div`
   overflow: auto;
 
   grid-template-columns: auto 1fr auto;
-  grid-auto-rows: 20px;
+  grid-auto-rows: minmax(20px, auto);
 
   .user {
     font-style: bold;
@@ -39,7 +39,7 @@ export const MessageArea = styled.div`
   }
 
   span {
-    margin: 3px 0;
+    padding: 3px 0;
     min-height: 2rem;
     background: #58a4b0;
     &:nth-of-type(6n + 4),
