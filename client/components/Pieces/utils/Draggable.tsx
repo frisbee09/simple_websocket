@@ -26,7 +26,7 @@ const Draggable: React.FC<
   { initialX?: number; initialY?: number } & React.HTMLAttributes<
     HTMLDivElement
   >
-> = ({ onDragStart, onDragEnd, initialX, initialY, children }) => {
+> = ({ onDragStart, onDragEnd, initialX, initialY, children, ...rest }) => {
   const [isDragging, setDragging] = React.useState<boolean>(false);
 
   const [grabDelta, setGrabDelta] = React.useState<{ x: number; y: number }>({
@@ -37,6 +37,10 @@ const Draggable: React.FC<
     x: initialX || 0,
     y: initialY || 0,
   });
+
+  React.useEffect(() => {
+    setPos({ x: initialX || pos.x, y: initialY || pos.y });
+  }, [initialX, initialY]);
 
   React.useEffect(() => {
     if (isDragging) {
@@ -95,9 +99,27 @@ const Draggable: React.FC<
     }
   };
 
+  const handleTouchDown = (e: React.TouchEvent<HTMLDivElement>) => {
+    setDragging(true);
+
+    const { clientX, clientY } = e.changedTouches[0];
+    const currentGrabDelta = { x: clientX - pos.x, y: clientY - pos.y };
+    setGrabDelta(currentGrabDelta);
+    setPos({
+      x: clientX - currentGrabDelta.x,
+      y: clientY - currentGrabDelta.y,
+    });
+
+    if (onDragStart) {
+      onDragStart(e as any);
+    }
+  };
+
   return (
     <DragContainer
+      {...rest}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchDown}
       x={pos.x}
       y={pos.y}
       isDragging={isDragging}

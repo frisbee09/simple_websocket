@@ -1,11 +1,13 @@
 import initialState, { ServerState, Message } from "./state";
 import * as serverActions from "./actions";
+import * as piecesActions from "../pieces/actions";
 import { getType } from "typesafe-actions";
-import { ServerActions } from "../types";
+import { ServerActions, PiecesActions } from "../types";
 import * as cuid from "cuid";
+import { piecesReducer } from "../pieces/reducer";
 const serverReducer = (
   state: ServerState = initialState,
-  action: ServerActions
+  action: ServerActions | PiecesActions
 ) => {
   switch (action.type) {
     case getType(serverActions.sendMessage): {
@@ -18,9 +20,6 @@ const serverReducer = (
       };
       return { ...state, messages: [...state.messages, message] };
     }
-
-    case getType(serverActions.registerUser):
-      return state;
 
     case getType(serverActions.persistUser): {
       const newUserId = action.payload.id;
@@ -37,6 +36,13 @@ const serverReducer = (
             },
           },
         },
+      };
+    }
+
+    case getType(piecesActions.sendPiecesUpdateToServer): {
+      return {
+        ...state,
+        pieces: piecesReducer(state.pieces, action),
       };
     }
     default:

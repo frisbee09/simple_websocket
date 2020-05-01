@@ -1,0 +1,5 @@
+export const REQUEST_GAME_STATE = "REQUEST_GAME_STATE";
+
+export const GAME_STATE = "GAME_STATE";
+
+export const UPDATE_PIECES = "UPDATE_PIECES"

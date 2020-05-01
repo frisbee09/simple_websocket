@@ -8,6 +8,6 @@
     "strict": true,
     "alwaysStrict": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "redux/pieces"],
   "exclude": ["node_modules"]
 }

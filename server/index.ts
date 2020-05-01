@@ -6,6 +6,7 @@ import { resolve } from "path";
 import { app, server, io } from "./setup";
 import { handleChat, handleRequestMessages } from "./chat";
 import { handleRegister, handleConnection } from "./handshake";
+import { handleGameState } from "./pieces";
 
 app.get("/", (req, res) => {
   const indexHTMLLocation = resolve(`./dist/public/index.html`);
@@ -23,6 +24,8 @@ io.on("connection", (socket: SocketIO.Socket) => {
 
   handleChat(socket);
   handleRequestMessages(socket);
+
+  handleGameState(socket);
 
   socket.on("disconnect", (socket: SocketIO.Socket) => {
     console.log("Goodbye, friend!");
