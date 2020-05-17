@@ -30,4 +30,7 @@ export const useRegistration = (
   }, [socket?.id]);
 };
 
+export const getUserId = () =>
+  window.localStorage.getItem("userId") || `Undefined User`;
+
 export default handleRegister;

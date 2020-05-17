@@ -1,32 +1,33 @@
 import { createAction } from "typesafe-actions";
-import { Piece, PiecesState } from "./state";
+import { BoardState } from "./state";
+import { IPiece } from "../piece/types/IPiece";
 
 export const SEND_PIECES_UPDATE = "UPDATE_PIECES_ACTION";
 export const sendPiecesUpdateToServer = createAction(
   SEND_PIECES_UPDATE,
-  (user: string, pieces: Piece[]) => ({
+  (user: string, pieces: IPiece[]) => ({
     user,
     pieces,
   })
-)<{ user: string; pieces: Piece[] }>();
+)<{ user: string; pieces: IPiece[] }>();
 
 export const UPDATE_PIECE = "UPDATE_PIECE";
-export const updatePiece = createAction(UPDATE_PIECE, (piece: Piece) => ({
+export const updatePiece = createAction(UPDATE_PIECE, (piece: IPiece) => ({
   piece,
-}))<{ piece: Piece }>();
+}))<{ piece: IPiece }>();
 
 export const RECEIVE_GAME_STATE = "RECEIVE_GAME_STATE";
 export const receiveGameState = createAction(
   RECEIVE_GAME_STATE,
-  (game: Piece[]) => ({
+  (game: IPiece[]) => ({
     game,
   })
-)<{ game: Piece[] }>();
+)<{ game: IPiece[] }>();
 
 export const RECEIVE_PIECES_UPDATE = "RECEIVE_PIECES_UPDATE";
 export const receivePiecesUpdate = createAction(
   RECEIVE_PIECES_UPDATE,
-  (pieces: Piece[]) => ({
+  (pieces: IPiece[]) => ({
     pieces,
   })
-)<{ pieces: Piece[] }>();
+)<{ pieces: IPiece[] }>();

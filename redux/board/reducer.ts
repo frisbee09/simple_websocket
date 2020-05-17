@@ -1,9 +1,11 @@
 import { PiecesActions } from "../types";
-import { PiecesState, Piece } from "./state";
+import { BoardState } from "./state";
+import { IPiece } from "../piece/types/IPiece";
 import * as piecesActions from "./actions";
 import { getType } from "typesafe-actions";
+import withLogging from "../utils/withLogging";
 
-export const piecesReducer = (state: PiecesState, action: PiecesActions) => {
+const piecesReducerDefinition = (state: BoardState, action: PiecesActions) => {
   switch (action.type) {
     case getType(piecesActions.receiveGameState):
       /**
@@ -12,6 +14,16 @@ export const piecesReducer = (state: PiecesState, action: PiecesActions) => {
       return {
         byId: transformPieceArrayToState(action.payload.game),
         ids: action.payload.game.map((piece) => piece.id),
+      };
+
+    case getType(piecesActions.updatePiece):
+      const { id: pieceId, x, y } = action.payload.piece;
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [pieceId]: Object.assign({}, state.byId[pieceId], { x, y }),
+        },
       };
 
     case getType(piecesActions.receivePiecesUpdate):
@@ -36,7 +48,9 @@ export const piecesReducer = (state: PiecesState, action: PiecesActions) => {
   }
 };
 
-const singlePieceReducer = (state: Piece, action: PiecesActions) => {
+export const piecesReducer = withLogging(piecesReducerDefinition);
+
+const singlePieceReducer = (state: IPiece, action: PiecesActions) => {
   switch (action.type) {
     case getType(piecesActions.updatePiece):
       return { ...action.payload.piece, emoji: state.emoji };
@@ -46,17 +60,17 @@ const singlePieceReducer = (state: Piece, action: PiecesActions) => {
 };
 
 const mapPiecesToReducerWithAction = (
-  piecesState: PiecesState,
-  action: (piece: Piece) => PiecesActions
-) => (updates: Piece[]) =>
+  piecesState: BoardState,
+  action: (piece: IPiece) => PiecesActions
+) => (updates: IPiece[]) =>
   updates
     .filter((piece) => piecesState.ids.includes(piece.id))
     .map((piece) =>
       singlePieceReducer(piecesState.byId[piece.id], action(piece))
     );
 
-const transformPieceArrayToState = (updates: Piece[]) =>
+const transformPieceArrayToState = (updates: IPiece[]) =>
   updates.reduce((newState, piece) => {
     newState[piece.id] = piece;
     return newState;
-  }, {} as { [id: string]: Piece });
+  }, {} as { [id: string]: IPiece });

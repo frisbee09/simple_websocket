@@ -1,4 +1,4 @@
-import { PiecesState, initialPiecesState } from "../pieces/state";
+import { BoardState, initialBoardState } from "../board/state";
 
 export interface Message {
   user: string;
@@ -20,7 +20,7 @@ export interface ServerState {
     cookies: string[];
     names: string[];
   };
-  pieces: PiecesState;
+  pieces: BoardState;
   messages: Message[];
 }
 
@@ -37,7 +37,7 @@ const initialState: ServerState = {
       return Object.values(this.byId).map((user) => user.name);
     },
   },
-  pieces: initialPiecesState,
+  pieces: initialBoardState,
   messages: [],
 };
 

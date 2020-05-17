@@ -8,6 +8,7 @@ import { registerUser } from "../../../redux/server/actions";
 import SignIn from "./components/SignIn";
 import { media } from "./config/MediaQuery";
 import PlayArea from "../Play";
+import PlayAreaContainer from "../Play/context/PlayAreaContainer";
 
 const AppWrapper = styled.div`
   height: 100%;
@@ -42,7 +43,9 @@ const App: React.FC<{}> = () => {
         {user.name && user.id ? (
           <>
             <Chat userId={user.id} />
-            <PlayArea />
+            <PlayAreaContainer>
+              <PlayArea userId={user.id} />
+            </PlayAreaContainer>
           </>
         ) : (
           <SignIn register={requestRegister} />

@@ -1,5 +1,5 @@
 import { REQUEST_GAME_STATE, GAME_STATE, UPDATE_PIECES } from "./constants";
-import { sendPiecesUpdateToServer } from "../../redux/pieces/actions";
+import { sendPiecesUpdateToServer } from "../../redux/board/actions";
 import store, { withDispatch } from "../../redux/server/store";
 
 /**

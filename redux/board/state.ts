@@ -1,22 +1,15 @@
 import * as cuid from "cuid";
+import { IPiece } from "../piece/types/IPiece";
 
-export interface Piece {
-  id: string;
-  x: number;
-  y: number;
-  contains: Piece[];
-  emoji: string;
-}
-
-export interface PiecesState {
+export interface BoardState {
   byId: {
-    [id: string]: Piece;
+    [id: string]: IPiece;
   };
   ids: string[];
 }
 const initialPieceId = cuid();
 
-export const initialPiecesState = {
+export const initialBoardState = {
   byId: {
     [initialPieceId]: {
       id: initialPieceId,

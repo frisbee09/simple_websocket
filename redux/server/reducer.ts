@@ -1,10 +1,10 @@
 import initialState, { ServerState, Message } from "./state";
 import * as serverActions from "./actions";
-import * as piecesActions from "../pieces/actions";
+import * as piecesActions from "../board/actions";
 import { getType } from "typesafe-actions";
 import { ServerActions, PiecesActions } from "../types";
 import * as cuid from "cuid";
-import { piecesReducer } from "../pieces/reducer";
+import { piecesReducer } from "../board/reducer";
 const serverReducer = (
   state: ServerState = initialState,
   action: ServerActions | PiecesActions
