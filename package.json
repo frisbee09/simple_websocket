@@ -24,7 +24,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "core-js": "^3.6.5",
     "cuid": "^2.1.8",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "q": "^1.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
